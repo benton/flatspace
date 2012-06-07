@@ -26,16 +26,21 @@ var fspace = function () {
   // start the simulation: (draw the player)
   function startSimulation() {
 
-    // Create the player ship
-    var player_ship = Crafty.e("FlatSpacePlayerShip")
-      .set_ship_options({
-        player_name: player_name,
-        x: 160, y: 96, w: 8, h: 8,
-        ship_color: "#FF0000",
-        ship_speed: 3
-      })
-
-    console.log(player_ship);  // log the created entity to the JS console
+    // Create all player ships
+    Players.find().forEach(function (player) {
+      var this_ship = Crafty.e("FlatSpacePlayerShip")
+        .set_ship_options({
+          player_name: player.name,
+          x: player.pos_x, y: player.pos_y, w: 8, h: 8,
+          ship_color: player.color
+        });
+      // Add Fourway controls if this ship's name matches the login name
+      if (player.name === player_name) {
+        this_ship.addComponent("PositionBroadcaster");
+        console.log(this_ship);
+        this_ship.fourway(3);
+      }
+    });
   };
 
   return {
