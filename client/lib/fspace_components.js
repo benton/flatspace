@@ -5,6 +5,7 @@ var fspace_components = function () {
 
   // Sets up the Crafty.js game components
   function setupCrafyComponents() {
+
     // Create a component that includes the logic for pointing
     // to a persistent proxy object in the Node.js database
     Crafty.c("PersistentProxy", {
@@ -31,7 +32,7 @@ var fspace_components = function () {
     // in a document in a Meteor collection on the server
     Crafty.c("PositionBroadcaster", {
         init: function() {
-          this.requires("PersistentProxy");
+          this.requires("PersistentProxy, 2D");
           this.bind("Move", function(old_pos) {
             console.log("Setting position of "+ this.game_id);
             this.collection.update(
@@ -40,6 +41,22 @@ var fspace_components = function () {
           });
         }
     });
+
+    // Create a component that tracks position and saves it
+    // in a document in a Meteor collection on the server
+    Crafty.c("FlatSpacePlayerShip", {
+        _player_name: 'unknown',
+        set_ship_options: function(options) {
+          this.requires("PositionBroadcaster, Canvas, Color, Fourway");
+          this._player_name = options.player_name;
+          this.color(options.ship_color)  // for Component Color
+            .fourway(options.ship_speed)   // for Component Fourway
+            .attr(options)                 // for Component 2D - x,y,w,h
+            .set_role("master")
+          return this;
+        }
+    });
+
   };
 
   //**** PUBLIC METHODS ****//

@@ -3,6 +3,9 @@
 //  * login(username)
 var fspace = function () {
 
+  //**** PRIVATE ATTRIBUTES ****//
+  var player_name = 'unknown';
+
   //**** PRIVATE METHODS ****//
 
   // Initilize is a private method that sets up the frameworks.
@@ -22,19 +25,17 @@ var fspace = function () {
 
   // start the simulation: (draw the player)
   function startSimulation() {
-    /*
-     * Create an entity with Crafty.e(..) that
-     *  - can be drawn (2D) on a HTML canvas (Canvas)
-     *  - has a background color (Color)
-     *  - can be moved with WASD or arrow keys (Fourway)
-     */
-    var pl = Crafty.e("2D, Canvas, Color, Fourway, PositionBroadcaster")
-                .attr({x: 160, y: 96, w: 8, h: 8}) // for Component 2D
-                .color("#FF0000")     // for Component Color
-                .fourway(10)          // for Component Fourway
-                .set_role('master');  // for PersistentProxy
-    // log the created entity to the JS console
-    console.log(pl);
+
+    // Create the player ship
+    var player_ship = Crafty.e("FlatSpacePlayerShip")
+      .set_ship_options({
+        player_name: player_name,
+        x: 160, y: 96, w: 8, h: 8,
+        ship_color: "#FF0000",
+        ship_speed: 3
+      })
+
+    console.log(player_ship);  // log the created entity to the JS console
   };
 
   return {
@@ -43,7 +44,8 @@ var fspace = function () {
 
     // The login method is the entry point for the FlatSpace API.
     login: function (username) {
-      console.log("Logged in as "+ username);
+      player_name = username;
+      console.log("Logged in as "+ player_name);
       initialize();
       return true;
     },
