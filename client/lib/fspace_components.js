@@ -29,10 +29,33 @@ var fspace_components = function () {
       init: function() {
         this.requires("PersistentProxy, 2D, Fourway");
         this.set_role('master');
+        // Push position updates into the Meteor database collection
         this.bind("Move", function(old_pos) {
           Players.update(
             this.game_id(), {$set: {pos_x: this._x, pos_y: this._y}}
           );
+        });
+        return this;
+      }
+    });
+
+    // Create a component that tracks position attributes in a Meteor
+    // datastore document, and applies them to a Crafty entity
+    Crafty.c("PositionListener", {
+      init: function() {
+        var collection  = this.collection();
+        var id          = this.game_id();
+        var slave       = this;
+        this.requires("PersistentProxy, 2D");
+        this.set_role('slave');
+        // Listen for Meteor doc updates
+        Meteor.autosubscribe(function () {
+          collection.find({ _id: id }).forEach( function(player_doc) {
+            slave._x = player_doc.pos_x;
+            slave._y = player_doc.pos_y;
+            //slave.undraw(); // Would prefer to undraw a Canvas entity
+            slave.draw();
+          });
         });
         return this;
       }
@@ -43,7 +66,7 @@ var fspace_components = function () {
     Crafty.c("FlatSpacePlayerShip", {
       _player_name: 'unknown',
       set_ship_options: function(options) {
-        this.requires("PersistentProxy, 2D, Canvas, Color");
+        this.requires("PersistentProxy, 2D, DOM, Color");
         this._player_name = options.player_name;
         this.color(options.ship_color);   // for Component Color
         this.attr({                       // for Componenet 2D

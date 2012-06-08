@@ -42,8 +42,9 @@ var fspace = function () {
       // Add Fourway controls if this ship's name matches the login name
       if (player.name === player_name) {
         this_ship.addComponent("PositionBroadcaster");
-        console.log(this_ship);
         this_ship.fourway(3);
+      } else {
+        this_ship.addComponent("PositionListener");
       }
     });
   };
