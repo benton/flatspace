@@ -1,8 +1,9 @@
 body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 200;
-    margin: 50px 0;
+    margin: 20px 0;
     padding: 0;
+    background-color: gray;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
@@ -13,5 +14,5 @@ body {
 #cr-stage {
   border: 2px solid black; 
   margin: 5px auto; 
-  color: white;
+  background-color: white;
 }

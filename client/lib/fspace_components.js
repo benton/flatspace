@@ -48,7 +48,7 @@ var fspace_components = function () {
         this.color(options.ship_color);   // for Component Color
         this.attr({                       // for Componenet 2D
           x: options.x, y: options.y, w: options.w, h: options.h,
-        });              // for Component 2D - x,y,w,h
+        });
         this._db_id = options.db_id;
         return this;
       }
