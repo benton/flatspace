@@ -5,14 +5,18 @@ var fspace = function () {
 
   //**** PRIVATE ATTRIBUTES ****//
   var player_name = 'unknown';
+  var initialized = false;
 
   //**** PRIVATE METHODS ****//
 
   // Initilize is a private method that sets up the frameworks.
   // It's called when the user logs in.
   function initialize() {
-    fspace_components.initialize();
-    setupCraftyStage();
+    if (initialized === false) {
+      fspace_components.initialize();
+      setupCraftyStage();
+      this.initialized = true;
+    }
     startSimulation();
   };
 
@@ -58,7 +62,7 @@ var fspace = function () {
 
     // The login method is the entry point for the FlatSpace API.
     logout: function () {
-      Crafty.stop(); // This is throwing an exception -- not sure why
+      //Crafty.stop(); // This is throwing an exception -- not sure why
       console.log("Logged out");
       window.location.reload()
       return true;

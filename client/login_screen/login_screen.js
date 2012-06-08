@@ -1,3 +1,7 @@
+Template.login_screen.player_name = function () {
+  return Session.get("player_name") || "player";
+}
+
 // Event list
 Template.login_screen.events = {
   
@@ -5,20 +9,19 @@ Template.login_screen.events = {
   'click input.loginout': function () {
     if ($("input.loginout").attr('value') === 'Login as:') {
       // Login
-      Session.set("player_name", $("input.username").attr('value'));
-      console.log("Logging in as "+ Session.get("player_name"));
+      username = $("input.username").attr('value');
+      Session.set("username", username);
       $("input.username").attr('disabled', true);
       $("input.username").attr('blur', true);
       $("input.loginout").attr('value', 'Logout');
-      fspace.login(Session.get("player_name"));  // Start the game
+      console.log("Logging in as "+ username);
+      fspace.login(username);  // Start the game
     }
     else {
       // Logout
-      console.log("Logging out "+ Session.get("player_name"));
-      Session.set("player_name", null);
       $("input.username").attr('disabled', false);
-      $("input.username").attr('value', '');
       $("input.loginout").attr('value', 'Login as:');
+      console.log("Logging out "+ Session.get("username"));
       fspace.logout();
     };
   }
