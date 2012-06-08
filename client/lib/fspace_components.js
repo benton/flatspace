@@ -11,12 +11,14 @@ var fspace_components = function () {
     Crafty.c("PersistentProxy", {
       // Sets the master or slave role
       _persistent_proxy_role: 'slave',
+      _db_id: null,
       set_role: function (role_name) {
         this._persistent_proxy_role = role_name;
         return this;
       },
       // Returns a game-wide unique ID for this persistent game object
-      game_id: function () { return this._player_name; },
+      game_id: function () { return this._db_id; },
+
       // The Node.js database collection name for this game entity
       collection: function () { return Players; },
     });
@@ -28,9 +30,8 @@ var fspace_components = function () {
         this.requires("PersistentProxy, 2D, Fourway");
         this.set_role('master');
         this.bind("Move", function(old_pos) {
-          console.log("Setting position of "+ this.game_id());
-          this.collection().update(
-            this.game_id, {$set: {pos_x: this._x, pos_y: this._y}}
+          Players.update(
+            this.game_id(), {$set: {pos_x: this._x, pos_y: this._y}}
           );
         });
         return this;
@@ -44,8 +45,11 @@ var fspace_components = function () {
       set_ship_options: function(options) {
         this.requires("PersistentProxy, 2D, Canvas, Color");
         this._player_name = options.player_name;
-        this.color(options.ship_color)  // for Component Color
-        this.attr(options)              // for Component 2D - x,y,w,h
+        this.color(options.ship_color);   // for Component Color
+        this.attr({                       // for Componenet 2D
+          x: options.x, y: options.y, w: options.w, h: options.h,
+        });              // for Component 2D - x,y,w,h
+        this._db_id = options.db_id;
         return this;
       }
     });

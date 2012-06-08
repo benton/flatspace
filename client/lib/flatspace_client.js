@@ -31,8 +31,9 @@ var fspace = function () {
       var this_ship = Crafty.e("FlatSpacePlayerShip")
         .set_ship_options({
           player_name: player.name,
-          x: player.pos_x, y: player.pos_y, w: 8, h: 8,
-          ship_color: player.color
+          ship_color: player.color,
+          db_id: player._id,
+          x: player.pos_x, y: player.pos_y, w: 8, h: 8
         });
       // Add Fourway controls if this ship's name matches the login name
       if (player.name === player_name) {
