@@ -22,7 +22,7 @@ var fspace = function () {
 
   // Sets up the Crafty.js Stage
   function setupCraftyStage() {
-    var WIDTH = $(window).width() - 20, HEIGHT = 360;
+    var WIDTH = $(window).width() - 20, HEIGHT = $(window).height() - 80;
     // Initialize Crafty
     Crafty.init(WIDTH, HEIGHT);
   };
