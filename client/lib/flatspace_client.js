@@ -56,6 +56,18 @@ var fspace = function () {
     // The login method is the entry point for the FlatSpace API.
     login: function (username) {
       player_name = username;
+      var colors = ["red", "yellow", "blue", "green"];
+      // Create the player if the name doesn't already exist
+      if (Players.find({name: player_name}).fetch().length < 1) {
+        console.log("Creating new player "+ player_name)
+        Players.insert({
+          name:  player_name,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          pos_x: Math.floor(Math.random()*300),
+          pos_y: Math.floor(Math.random()*300),
+          score: Math.floor(Math.random()*10)*5
+        });
+      }
       console.log("Logged in as "+ player_name);
       initialize();
       return true;

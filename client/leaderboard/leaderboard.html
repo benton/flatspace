@@ -1,21 +1,22 @@
 <template name="leaderboard">
-  <div class="leaderboard">
-    {{#each players}}
-      {{> player}}
-    {{/each}}
-  </div>
+  {{#unless loggedin}}
+    <div class="leaderboard">
+      {{#each players}}
+        {{> player}}
+      {{/each}}
+    </div>
 
-  {{#if selected_name}}
-  <div class="details">
-    <div class="name">{{selected_name}}</div>
-    <input type="button" class="inc" value="Give 5 points" />
-    <input type="button" class="del" value="Delete" />
-    {{> navigation_controls}}
-  </div>
-  {{/if}}
+    {{#if selected_name}}
+    <div class="details">
+      <div class="name">{{selected_name}}</div>
+      <input type="button" class="inc" value="Give 5 points" />
+      <input type="button" class="del" value="Delete" />
+    </div>
+    {{/if}}
 
-  {{#unless selected_name}}
-  <div class="none">Click a player to select</div>
+    {{#unless selected_name}}
+    <div class="none">Click a player to select</div>
+    {{/unless}}
   {{/unless}}
 </template>
 
@@ -25,13 +26,4 @@
     <span class="position">({{color}}) {{pos_x}}, {{pos_y}}</span>
     <span class="score">{{score}}</span>
   </div>
-</template>
-
-<template name="navigation_controls">
-  <table>
-    <tr><td></td><td><input type="button" class="move_up" value="Up" /></td><td></td></tr>
-    <tr><td><input type="button" class="move_left" value="Left" /></td><td></td>
-        <td><input type="button" class="move_right" value="Right" /></td></tr>
-    <tr><td></td><td><input type="button" class="move_down" value="Down" /></td><td></td></tr>
-  </table>
 </template>

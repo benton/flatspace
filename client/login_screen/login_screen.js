@@ -1,5 +1,5 @@
 Template.login_screen.player_name = function () {
-  return Session.get("player_name") || "player";
+  return Session.get("player_name") || "";
 }
 
 // Event list
@@ -19,6 +19,7 @@ Template.login_screen.events = {
     }
     else {
       // Logout
+      Session.set("username", null);
       $("input.username").attr('disabled', false);
       $("input.loginout").attr('value', 'Login as:');
       console.log("Logging out "+ Session.get("username"));
