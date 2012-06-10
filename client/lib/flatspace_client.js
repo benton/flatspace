@@ -1,11 +1,14 @@
-// the top-level FlatSpace module
-// provides public methods:
-//  * login(username)
+// The top-level FlatSpace module.
+// Provides the following public methods:
+//    * login(username)
+//    * logout()
+//    * msg(log_message)
 var fspace = function () {
 
   //**** PRIVATE ATTRIBUTES ****//
-  var player_name = 'unknown';
-  var initialized = false;
+  var player_name     = 'unknown';
+  var initialized     = false;
+  var log_to_console  = true;
 
   //**** PRIVATE METHODS ****//
 
@@ -13,11 +16,11 @@ var fspace = function () {
   // It's called when the user logs in.
   function initialize() {
     if (initialized === false) {
+      log_meteor_connection_status();
       fspace_components.initialize();
       setupCraftyStage();
       this.initialized = true;
     }
-    startSimulation();
   };
 
   // Sets up the Crafty.js Stage
@@ -29,7 +32,6 @@ var fspace = function () {
 
   // start the simulation: (draw the player)
   function startSimulation() {
-
     // Create all player ships
     Players.find().forEach(function (player) {
       var this_ship = Crafty.e("FlatSpacePlayerShip")
@@ -49,17 +51,36 @@ var fspace = function () {
     });
   };
 
-  return {
+  // Log the connection status to the server
+  function log_meteor_connection_status() {
+    var update = function () {
+      var ctx = new Meteor.deps.Context();  // invalidation context
+      ctx.on_invalidate(update);            // rerun update() on invalidation
+      ctx.run(function () {
+        var is_connected = Meteor.status().connected;
+        var connection_status = Meteor.status().status;
+        if (is_connected) {
+          fspace.msg("Connected to game server");
+        } else {
+          fspace.msg("Disconnected from game server. "+ connection_status);
+        };
+      });
+    };
+    update();
+  };
 
+
+  return {
     //**** PUBLIC METHODS ****//
 
     // The login method is the entry point for the FlatSpace API.
     login: function (username) {
       player_name = username;
+      initialize();
       var colors = ["red", "yellow", "blue", "green"];
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
-        console.log("Creating new player "+ player_name)
+        fspace.msg("Creating new player "+ player_name)
         Players.insert({
           name:  player_name,
           color: colors[Math.floor(Math.random() * colors.length)],
@@ -68,17 +89,30 @@ var fspace = function () {
           score: Math.floor(Math.random()*10)*5
         });
       }
-      console.log("Logged in as "+ player_name);
-      initialize();
+      fspace.msg("Logged in as "+ player_name);
+      startSimulation();
       return true;
     },
 
     // The login method is the entry point for the FlatSpace API.
     logout: function () {
       //Crafty.stop(); // This is throwing an exception -- not sure why
-      console.log("Logged out");
+      fspace.msg("Logged out");
       window.location.reload()
       return true;
+    },
+
+    // Puts a String message into the Meteor Session as fspace_status.
+    // Logs a message to the console if logging is set with
+    // log_to_console(true)
+    msg: function (msg) {
+      Session.set("fspace_status", msg);
+      if (log_to_console) { console.log(msg); }
+    },
+
+    // Sets whether or not to log messages to the console
+    log_to_console: function (true_or_false) {
+      log_to_console = true_or_false;
     }
 
   };
