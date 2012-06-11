@@ -7,9 +7,9 @@ Template.login_screen.status_message = function () {
 };
 
 Template.login_screen.player_name_disabled = function () {
-  var response = "true";
+  var response = "disabled=\"true\"";
   if (Session.get("username") === undefined) {
-    response = "false";
+    response = "";
   }
   return response;
 };
