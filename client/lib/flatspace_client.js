@@ -30,7 +30,7 @@ var fspace = function () {
     Crafty.init(WIDTH, HEIGHT);
   };
 
-  // start the simulation: (draw the player)
+  // start the simulation: (draw the players)
   function startSimulation() {
     // Create all player ships
     Players.find().forEach(function (player) {
@@ -75,7 +75,11 @@ var fspace = function () {
 
     // The login method is the entry point for the FlatSpace API.
     login: function (username) {
-      player_name = username;
+      player_name = $.trim(username);
+      if (player_name.length === 0) {
+        fspace.msg("Please enter a new or existing player name");
+        return false;
+      }
       initialize();
       var colors = ["red", "yellow", "blue", "green"];
       // Create the player if the name doesn't already exist

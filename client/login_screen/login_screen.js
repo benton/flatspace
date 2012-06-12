@@ -23,18 +23,25 @@ Template.login_screen.login_button_text = function () {
 };
 
 
+Template.login_screen.do_login = function () {
+  username = $("input.username").attr('value');
+  fspace.msg("Logging in as "+ username);
+  if (fspace.login(username)) {
+    Session.set("username", username);
+  } else {
+    $("input.username").attr('value', '');
+    $("input.username").focus();
+  }
+};
+
+
 // Event list
 Template.login_screen.events = {
 
   // When the loginout button is clicked...
   'click input.loginout': function () {
     if ($("input.loginout").attr('value') === 'Login as:') {
-      // Login
-      username = $("input.username").attr('value');
-      Session.set("username", username);
-      fspace.msg("Logging in as "+ username);
-      fspace.login(username);  // Start the game
-      Meteor.flush();
+      Template.login_screen.do_login();
     }
     else {
       // Logout
@@ -43,6 +50,13 @@ Template.login_screen.events = {
       Session.set("username", null);
       fspace.logout();
     };
+  },
+
+  // When the loginout button is clicked...
+  'keypress input.username': function (e) {
+    if (e.which === 13.0) { // ENTER keypress    :-\
+      Template.login_screen.do_login();
+    }
   }
 
 };
