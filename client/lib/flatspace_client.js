@@ -29,6 +29,7 @@ var fspace = function () {
     var WIDTH = $(window).width() - 20, HEIGHT = $(window).height() - 100;
     // Initialize Crafty
     Crafty.init(WIDTH, HEIGHT);
+    Crafty.canvas.init();
   };
 
   // start the simulation: (draw the players)
