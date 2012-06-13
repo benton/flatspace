@@ -9,16 +9,9 @@ var fspace_components = function () {
     // Create a component that includes the logic for pointing
     // to a persistent proxy object in the Node.js database
     Crafty.c("PersistentProxy", {
-      // Sets the master or slave role
-      _persistent_proxy_role: 'slave',
       _db_id: null,
-      set_role: function (role_name) {
-        this._persistent_proxy_role = role_name;
-        return this;
-      },
       // Returns a game-wide unique ID for this persistent game object
       game_id: function () { return this._db_id; },
-
       // The Node.js database collection name for this game entity
       collection: function () { return Players; },
     });
@@ -28,7 +21,6 @@ var fspace_components = function () {
     Crafty.c("PositionBroadcaster", {
       init: function() {
         this.requires("PersistentProxy, 2D, Fourway");
-        this.set_role('master');
         // Push position updates into the Meteor database collection
         this.bind("Move", function(old_pos) {
           Players.update(
@@ -43,18 +35,15 @@ var fspace_components = function () {
     // datastore document, and applies them to a Crafty entity
     Crafty.c("PositionListener", {
       init: function() {
+        this.requires("PersistentProxy, 2D");
         var collection  = this.collection();
         var id          = this.game_id();
         var slave       = this;
-        this.requires("PersistentProxy, 2D");
-        this.set_role('slave');
         // Listen for Meteor doc updates
         Meteor.autosubscribe(function () {
           collection.find({ _id: id }).forEach( function(player_doc) {
-            slave._x = player_doc.pos_x;
-            slave._y = player_doc.pos_y;
-            //slave.undraw(); // Would prefer to undraw a Canvas entity
-            slave.draw();
+            slave.x = player_doc.pos_x;
+            slave.y = player_doc.pos_y;
           });
         });
         return this;
@@ -66,7 +55,7 @@ var fspace_components = function () {
     Crafty.c("FlatSpacePlayerShip", {
       _player_name: 'unknown',
       set_ship_options: function(options) {
-        this.requires("PersistentProxy, 2D, DOM, Color");
+        this.requires("PersistentProxy, 2D, Canvas, Color");
         this._player_name = options.player_name;
         this.color(options.ship_color);   // for Component Color
         this.attr({                       // for Componenet 2D
