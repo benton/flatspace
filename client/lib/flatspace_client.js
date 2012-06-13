@@ -8,7 +8,7 @@ var fspace = function () {
   //**** PRIVATE ATTRIBUTES ****//
   var player_name     = 'unknown';
   var initialized     = false;
-  var log_to_console  = true;
+  var log_to_console  = false;
 
   //**** PRIVATE METHODS ****//
 
@@ -20,12 +20,13 @@ var fspace = function () {
       fspace_components.initialize();
       setupCraftyStage();
       this.initialized = true;
+      if (window.location.hostname === 'localhost') { log_to_console = true; }
     }
   };
 
   // Sets up the Crafty.js Stage
   function setupCraftyStage() {
-    var WIDTH = $(window).width() - 20, HEIGHT = $(window).height() - 80;
+    var WIDTH = $(window).width() - 20, HEIGHT = $(window).height() - 100;
     // Initialize Crafty
     Crafty.init(WIDTH, HEIGHT);
   };
