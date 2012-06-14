@@ -54,16 +54,37 @@ var fspace_components = function () {
     // in a document in a Meteor collection on the server
     Crafty.c("FlatSpacePlayerShip", {
       _player_name: 'unknown',
+      _color: 'gray',
+
+      init: function() {
+        this.requires("PersistentProxy, 2D, DOM");
+        return this;
+      },
+
       set_ship_options: function(options) {
-        this.requires("PersistentProxy, 2D, Canvas, Color");
         this._player_name = options.player_name;
-        this.color(options.ship_color);   // for Component Color
-        this.attr({                       // for Componenet 2D
+        this._color       = options.ship_color;
+        this._db_id       = options.db_id;
+        this.attr({       // for Componenet 2D
           x: options.x, y: options.y, w: options.w, h: options.h,
         });
-        this._db_id = options.db_id;
         return this;
       }
+    });
+
+    // Create circular player ship - a "Defender"
+    Crafty.c("FlatSpaceDefender", {
+      init: function() {
+        this.requires("FlatSpacePlayerShip");
+        var strokew = 1;
+        var pen     = new jxPen(new jxColor("white"), strokew);
+        var brush   = new jxBrush(new jxColor(this._color));
+        var center  = new jxPoint(this._w / 2, this._h / 2);
+        var radius  = (this._w / 2) - strokew;
+        var circle  = new jxCircle(center, radius, pen, brush);
+        circle.draw(new jxGraphics(this._element));
+        return this;
+      },
     });
 
   };
