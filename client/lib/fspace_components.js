@@ -92,7 +92,7 @@ var fspace_components = function () {
   //**** PUBLIC METHODS ****//
 
   return {
-    // Initilize is a public method that sets up the Crafy Components.
+    // Initialize is a public method that sets up the Crafy Components.
     initialize: function () {
       setupCrafyComponents();
     }

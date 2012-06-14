@@ -3,7 +3,8 @@ Template.login_screen.selected_player_name = function () {
 };
 
 Template.login_screen.status_message = function () {
-  return Session.get("fspace_status");
+  return Session.get("fspace_status") ||
+    "Enter a player name, or click on one";
 };
 
 Template.login_screen.player_name_disabled = function () {
