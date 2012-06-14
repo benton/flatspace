@@ -83,7 +83,7 @@ var fspace = function () {
         return false;
       }
       initialize();
-      var colors = ["red", "yellow", "blue", "green"];
+      var colors = ["red", "yellow", "blue", "green", "orange", "purple"];
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
         fspace.msg("Creating new player "+ player_name)
