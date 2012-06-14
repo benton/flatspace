@@ -26,10 +26,8 @@ var fspace = function () {
 
   // Sets up the Crafty.js Stage
   function setupCraftyStage() {
-    var WIDTH = $(window).width() - 20, HEIGHT = $(window).height() - 100;
-    // Initialize Crafty
-    Crafty.init(WIDTH, HEIGHT);
-    Crafty.canvas.init();
+    var WIDTH = $(window).width() - 20, HEIGHT = $(window).height() - 110;
+    Crafty.init(WIDTH, HEIGHT); // Initialize Crafty
   };
 
   // start the simulation: (draw the players)
@@ -41,15 +39,17 @@ var fspace = function () {
           player_name: player.name,
           ship_color: player.color,
           db_id: player._id,
-          x: player.pos_x, y: player.pos_y, w: 8, h: 8
+          x: player.pos_x, y: player.pos_y, w: 20, h: 20
         });
       // Add Fourway controls if this ship's name matches the login name
       if (player.name === player_name) {
         this_ship.addComponent("PositionBroadcaster");
-        this_ship.fourway(3);
+        this_ship.fourway(1);
       } else {
         this_ship.addComponent("PositionListener");
-      }
+      };
+      // (for now, everyone's a Defender)
+      this_ship.addComponent("FlatSpaceDefender");
     });
   };
 
