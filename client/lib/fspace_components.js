@@ -87,6 +87,37 @@ var fspace_components = function () {
       },
     });
 
+    // Create square player ship - a "Gunner"
+    Crafty.c("FlatSpaceGunner", {
+      init: function() {
+        this.requires("FlatSpacePlayerShip");
+        var strokew = 1;
+        var pen     = new jxPen(new jxColor("white"), strokew);
+        var brush   = new jxBrush(new jxColor(this._color));
+        var origin  = new jxPoint(strokew, strokew);
+        var size    = this._w - (strokew * 2);
+        var square  = new jxRect(origin, size, size, pen, brush);
+        square.draw(new jxGraphics(this._element));
+        return this;
+      },
+    });
+
+    // Create triangular player ship - a "Pilot"
+    Crafty.c("FlatSpacePilot", {
+      init: function() {
+        this.requires("FlatSpacePlayerShip");
+        var strokew = 1;
+        var pen       = new jxPen(new jxColor("white"), strokew);
+        var brush     = new jxBrush(new jxColor(this._color));
+        var bot_left  = new jxPoint(strokew, this.h - strokew);
+        var bot_right = new jxPoint(this._w - (strokew * 2), this.h - strokew);
+        var top       = new jxPoint(this._w / 2, strokew);
+        var triangle  = new jxPolygon([bot_left, bot_right, top], pen, brush);
+        triangle.draw(new jxGraphics(this._element));
+        return this;
+      },
+    });
+
   };
 
   //**** PUBLIC METHODS ****//
