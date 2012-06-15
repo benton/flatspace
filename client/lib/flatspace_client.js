@@ -49,7 +49,7 @@ var fspace = function () {
         this_ship.addComponent("PositionListener");
       };
       // (for now, everyone's a Defender)
-      this_ship.addComponent("FlatSpaceDefender");
+      this_ship.addComponent("FlatSpace"+ player.type);
     });
   };
 
@@ -84,11 +84,13 @@ var fspace = function () {
       }
       initialize();
       var colors = ["red", "yellow", "blue", "green", "orange", "purple"];
+      var types = ["Pilot", "Gunner", "Defender"];
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
         fspace.msg("Creating new player "+ player_name)
         Players.insert({
           name:  player_name,
+          type:  types[Math.floor(Math.random() * types.length)],
           color: colors[Math.floor(Math.random() * colors.length)],
           pos_x: Math.floor(Math.random()*300),
           pos_y: Math.floor(Math.random()*300),
