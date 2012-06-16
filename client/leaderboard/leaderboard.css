@@ -1,33 +1,34 @@
-
 .player {
     cursor: pointer;
-    padding: 5px;
+    border-style: none none solid none;
+    border-color: #ccc;
+    border-width: 1px;
+    color: #777;
 }
 
 .player .name {
     display: inline-block;
-    width: 300px;
-    font-size: 1.75em;
+    width: 200px;
+    font-size: 1.25em;
+    color: black;
 }
 
 .player .position {
     display: inline-block;
+    width:150px;
+    font-size: 0.75em;
 }
 
 .player .score {
     display: inline-block;
     width: 100px;
     text-align: right;
-    font-size: 2em;
     font-weight: bold;
-    color: #777;
+    font-size: 0.75em;
 }
 
 .player.selected {
     background-color: yellow;
-}
-
-.player.selected .score {
     color: black;
 }
 
