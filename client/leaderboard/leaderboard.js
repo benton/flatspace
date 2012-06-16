@@ -12,6 +12,17 @@ Template.leaderboard.selected_name = function () {
   return player && player.name;
 };
 
+Template.leaderboard.events = {
+  'click input.inc': function () {
+    Players.update(Session.get("selected_player"), {$inc: {score: 5}});
+  },
+  'click input.del': function () {
+    Players.remove(Session.get("selected_player"));
+  }
+};
+
+// Player template
+
 Template.player.selected = function () {
   return Session.equals("selected_player", this._id) ? "selected" : '';
 };
