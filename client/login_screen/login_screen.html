@@ -1,8 +1,8 @@
 <template name="login_screen">
 <div class="login_screen" id="login_screen">
   <input type="button" class="loginout" value="{{ login_button_text }}"/>
-  <input type="text" class="username"
-    value="{{ selected_player_name }}" {{ player_name_disabled }}/>
+  <input type="text" class="username" value="{{ player_name }}"
+    {{ player_name_disabled }}/>
   <span class="status">{{ status_message }}</span>
 </div>
 </template>

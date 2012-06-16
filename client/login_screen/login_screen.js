@@ -1,5 +1,5 @@
-Template.login_screen.selected_player_name = function () {
-  return Session.get("player_name") || "";
+Template.login_screen.player_name = function () {
+  return Session.get("username") || "";
 };
 
 Template.login_screen.status_message = function () {
@@ -29,6 +29,7 @@ Template.login_screen.do_login = function () {
   fspace.msg("Logging in as "+ username);
   if (fspace.login(username)) {
     Session.set("username", username);
+    $("input.username").attr('disabled', true);
   } else {
     $("input.username").attr('value', '');
     $("input.username").focus();
