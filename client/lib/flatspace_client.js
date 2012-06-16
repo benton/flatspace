@@ -9,7 +9,8 @@ var fspace = function () {
   var player_name     = 'unknown';
   var initialized     = false;
   var log_to_console  = false;
-
+  var ship_colors     = ["red", "yellow", "blue"];
+  var ship_types      = ["Pilot", "Gunner", "Defender"];
   //**** PRIVATE METHODS ****//
 
   // Initilize is a private method that sets up the frameworks.
@@ -18,9 +19,8 @@ var fspace = function () {
     if (initialized === false) {
       log_meteor_connection_status();
       fspace_components.initialize();
-      setupCraftyStage();
-      this.initialized = true;
       if (window.location.hostname === 'localhost') { log_to_console = true; }
+      this.initialized = true;
     }
   };
 
@@ -32,6 +32,7 @@ var fspace = function () {
 
   // start the simulation: (draw the players)
   function startSimulation() {
+    setupCraftyStage();
     // Create all player ships
     Players.find().forEach(function (player) {
       var this_ship = Crafty.e("FlatSpacePlayerShip")
@@ -71,7 +72,6 @@ var fspace = function () {
     update();
   };
 
-
   return {
     //**** PUBLIC METHODS ****//
 
@@ -84,21 +84,9 @@ var fspace = function () {
         return false;
       }
       initialize();
-      var colors = ["red", "yellow", "blue"];
-      var types = ["Pilot", "Gunner", "Defender"];
-      color = color || colors[Math.floor(Math.random() * colors.length)];
-      type = type || types[Math.floor(Math.random() * types.length)];
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
-        fspace.msg("Creating "+ color +" "+ type +": "+ player_name);
-        Players.insert({
-          name:  player_name,
-          type:  type,
-          color: color,
-          pos_x: Math.floor(Math.random()*300),
-          pos_y: Math.floor(Math.random()*300),
-          score: Math.floor(Math.random()*10)*5
-        });
+        fspace.createNewPlayer(username, type, color);
       }
       fspace.msg("Logged in as "+ player_name);
       startSimulation();
@@ -111,6 +99,23 @@ var fspace = function () {
       fspace.msg("Logged out");
       window.location.reload()
       return true;
+    },
+
+    createNewPlayer: function (username, type, color) {
+      color = color || ship_colors[Math.floor(Math.random() * ship_colors.length)];
+      type  = type || ship_types[Math.floor(Math.random() * ship_types.length)];
+      // Create the player if the name doesn't already exist
+      if (Players.find({name: player_name}).fetch().length < 1) {
+        fspace.msg("Creating "+ color +" "+ type +": "+ player_name);
+        Players.insert({
+          name:  player_name,
+          type:  type,
+          color: color,
+          pos_x: Math.floor(Math.random()*300),
+          pos_y: Math.floor(Math.random()*300),
+          score: Math.floor(Math.random()*10)*5
+        });
+      }
     },
 
     // Puts a String message into the Meteor Session as fspace_status.
