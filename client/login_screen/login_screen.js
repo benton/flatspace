@@ -28,8 +28,8 @@ Template.login_screen.do_login = function () {
   username  = $("input.username").attr('value');
   type      = Template.ship_options.get_ship_type();
   color     = Template.ship_options.get_ship_color();
-  fspace.msg("Logging in as "+ username);
-  if (fspace.login(username, type, color)) {
+  fsClient.msg("Logging in as "+ username);
+  if (fsClient.login(username, type, color)) {
     Session.set("username", username);
     Session.set("selected_player", null);
     $("input.username").attr('disabled', true);
@@ -51,9 +51,9 @@ Template.login_screen.events = {
     else {
       // Logout
       $("input.username").attr('disabled', false);
-      fspace.msg("Logging out "+ Session.get("username"));
+      fsClient.msg("Logging out "+ Session.get("username"));
       Session.set("username", null);
-      fspace.logout();
+      fsClient.logout();
     };
   },
 

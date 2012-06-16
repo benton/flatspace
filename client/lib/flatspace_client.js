@@ -3,7 +3,7 @@
 //    * login(username)
 //    * logout()
 //    * msg(log_message)
-var fspace = function () {
+var fsClient = function () {
 
   //**** PRIVATE ATTRIBUTES ****//
   var player_name     = 'unknown';
@@ -63,9 +63,9 @@ var fspace = function () {
         var is_connected = Meteor.status().connected;
         var connection_status = Meteor.status().status;
         if (is_connected) {
-          fspace.msg("Connected to game server");
+          fsClient.msg("Connected to game server");
         } else {
-          fspace.msg("Disconnected from game server. "+ connection_status);
+          fsClient.msg("Disconnected from game server. "+ connection_status);
         };
       });
     };
@@ -80,15 +80,15 @@ var fspace = function () {
     login: function (username, type, color) {
       player_name = $.trim(username);
       if (player_name.length === 0) {
-        fspace.msg("Please enter a new or existing player name");
+        fsClient.msg("Please enter a new or existing player name");
         return false;
       }
       initialize();
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
-        fspace.createNewPlayer(username, type, color);
+        fsClient.createNewPlayer(username, type, color);
       }
-      fspace.msg("Logged in as "+ player_name);
+      fsClient.msg("Logged in as "+ player_name);
       startSimulation();
       return true;
     },
@@ -96,7 +96,7 @@ var fspace = function () {
     // The login method is the entry point for the FlatSpace API.
     logout: function () {
       //Crafty.stop(); // This is throwing an exception -- not sure why
-      fspace.msg("Logged out");
+      fsClient.msg("Logged out");
       window.location.reload()
       return true;
     },
@@ -106,7 +106,7 @@ var fspace = function () {
       type  = type || ship_types[Math.floor(Math.random() * ship_types.length)];
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
-        fspace.msg("Creating "+ color +" "+ type +": "+ player_name);
+        fsClient.msg("Creating "+ color +" "+ type +": "+ player_name);
         Players.insert({
           name:  player_name,
           type:  type,

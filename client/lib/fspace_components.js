@@ -59,7 +59,7 @@ var fspace_components = function () {
       init: function() {
         this.requires("PersistentProxy, 2D, DOM");
         this.bind('KeyDown', function(e) {
-          if(e.key === Crafty.keys['ESC']) { fspace.logout(); }
+          if(e.key === Crafty.keys['ESC']) { fsClient.logout(); }
         });
         return this;
       },
