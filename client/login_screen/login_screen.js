@@ -56,7 +56,7 @@ Template.login_screen.events = {
 
   // When the loginout button is clicked...
   'keypress input.username': function (e) {
-    if (e.which === 13.0) { // ENTER keypress    :-\
+    if (e.which === Crafty.keys['ENTER']) {
       Template.login_screen.do_login();
     }
   }
