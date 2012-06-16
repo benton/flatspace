@@ -1,7 +1,7 @@
 // On server startup, create some players if the database is empty.
 Meteor.startup(function () {
   var names = [ "My Little Pwnie", "benton", "Diderot", "Stravinsky", "ed"];
-  var colors = ["red", "yellow", "blue", "green", "orange", "purple"];
+  var colors = ["red", "yellow", "blue"];
   var types = ["Pilot", "Gunner", "Defender"];
   if (Players.find().count() === 0) {
     for (var i = 0; i < names.length; i++)
