@@ -20,7 +20,7 @@ var fspace_components = function () {
     // in a document in a Meteor collection on the server
     Crafty.c("PositionBroadcaster", {
       init: function() {
-        this.requires("PersistentProxy, 2D, Fourway");
+        this.requires("PersistentProxy, 2D");
         // Push position updates into the Meteor database collection
         this.bind("Move", function(old_pos) {
           Players.update(
