@@ -86,7 +86,8 @@ var fsClient = function () {
       initialize();
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
-        fsClient.createNewPlayer(username, type, color);
+        fsClient.msg("Creating player "+ player_name);
+        fSpace.createNewPlayer(player_name, type, color);
       }
       fsClient.msg("Logged in as "+ player_name);
       startSimulation();
@@ -99,23 +100,6 @@ var fsClient = function () {
       fsClient.msg("Logged out");
       window.location.reload()
       return true;
-    },
-
-    createNewPlayer: function (username, type, color) {
-      color = color || ship_colors[Math.floor(Math.random() * ship_colors.length)];
-      type  = type || ship_types[Math.floor(Math.random() * ship_types.length)];
-      // Create the player if the name doesn't already exist
-      if (Players.find({name: player_name}).fetch().length < 1) {
-        fsClient.msg("Creating "+ color +" "+ type +": "+ player_name);
-        Players.insert({
-          name:  player_name,
-          type:  type,
-          color: color,
-          pos_x: Math.floor(Math.random()*300),
-          pos_y: Math.floor(Math.random()*300),
-          score: Math.floor(Math.random()*10)*5
-        });
-      }
     },
 
     // Puts a String message into the Meteor Session as fspace_status.
