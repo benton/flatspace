@@ -25,10 +25,13 @@ Template.login_screen.login_button_text = function () {
 
 
 Template.login_screen.do_login = function () {
-  username = $("input.username").attr('value');
+  username  = $("input.username").attr('value');
+  type      = Template.ship_options.get_ship_type();
+  color     = Template.ship_options.get_ship_color();
   fspace.msg("Logging in as "+ username);
-  if (fspace.login(username)) {
+  if (fspace.login(username, type, color)) {
     Session.set("username", username);
+    Session.set("selected_player", null);
     $("input.username").attr('disabled', true);
   } else {
     $("input.username").attr('value', '');
@@ -61,4 +64,40 @@ Template.login_screen.events = {
     }
   }
 
+};
+
+Template.login_screen.loggedin = function () {
+  if (Session.get("username")) { return true; }
+  return false;
+};
+
+
+// SHIP OPTIONS
+
+Template.ship_options.set_ship_color = function (color) {
+  $('.ship_color input:radio').each(function() {
+    if ($(this).attr('value') === color) { $(this).attr('checked', true); }
+  })
+};
+
+Template.ship_options.get_ship_color = function () {
+  color = undefined;
+  $('.ship_color input:radio').each(function() {
+    if ($(this).attr('checked') == 'checked') { color = $(this).attr('value'); }
+  })
+  return color;
+};
+
+Template.ship_options.set_ship_type = function (type) {
+  $('.ship_type input:radio').each(function() {
+    if ($(this).attr('value') === type) { $(this).attr('checked', true); }
+  })
+};
+
+Template.ship_options.get_ship_type = function () {
+  type = undefined;
+  $('.ship_type input:radio').each(function() {
+    if ($(this).attr('checked') == 'checked') { type = $(this).attr('value'); }
+  })
+  return type;
 };

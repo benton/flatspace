@@ -4,5 +4,27 @@
   <input type="text" class="username" value="{{ player_name }}"
     {{ player_name_disabled }}/>
   <span class="status">{{ status_message }}</span>
+  {{#unless loggedin}}
+    <br/>
+    {{> ship_options }}
+  {{/unless}}
 </div>
+</template>
+
+<template name="ship_options">
+  <div class="ship_options">
+    <table><tr><td width="50%">
+    <div class="ship_color">Ship Color:<br/>
+      <input type="radio" name="ship_color" value="yellow">Yellow<br/>
+      <input type="radio" name="ship_color" value="red">Red<br/>
+      <input type="radio" name="ship_color" value="blue">Blue<br/>
+    </div>
+    </td><td width="50%">
+    <div class="ship_type">Ship Type:<br/>
+      <input type="radio" name="ship_type" value="Pilot">Pilot<br/>
+      <input type="radio" name="ship_type" value="Gunner">Gunner<br/>
+      <input type="radio" name="ship_type" value="Defender">Defender<br/>
+    </div>
+    </td></tr></table>
+  </div>
 </template>

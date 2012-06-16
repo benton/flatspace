@@ -76,7 +76,8 @@ var fspace = function () {
     //**** PUBLIC METHODS ****//
 
     // The login method is the entry point for the FlatSpace API.
-    login: function (username) {
+    // username is required - type and color are optional
+    login: function (username, type, color) {
       player_name = $.trim(username);
       if (player_name.length === 0) {
         fspace.msg("Please enter a new or existing player name");
@@ -85,13 +86,15 @@ var fspace = function () {
       initialize();
       var colors = ["red", "yellow", "blue"];
       var types = ["Pilot", "Gunner", "Defender"];
+      color = color || colors[Math.floor(Math.random() * colors.length)];
+      type = type || types[Math.floor(Math.random() * types.length)];
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
-        fspace.msg("Creating new player "+ player_name)
+        fspace.msg("Creating "+ color +" "+ type +": "+ player_name);
         Players.insert({
           name:  player_name,
-          type:  types[Math.floor(Math.random() * types.length)],
-          color: colors[Math.floor(Math.random() * colors.length)],
+          type:  type,
+          color: color,
           pos_x: Math.floor(Math.random()*300),
           pos_y: Math.floor(Math.random()*300),
           score: Math.floor(Math.random()*10)*5

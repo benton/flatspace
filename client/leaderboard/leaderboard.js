@@ -30,6 +30,10 @@ Template.player.selected = function () {
 Template.player.events = {
   'click': function () {
     Session.set("selected_player", this._id);
+    Session.set("selected_color", this.color);
+    Session.set("selected_type", this.type);
     $("input.username").attr('value', this.name);
+    Template.ship_options.set_ship_color(this.color);
+    Template.ship_options.set_ship_type(this.type);
   }
 };

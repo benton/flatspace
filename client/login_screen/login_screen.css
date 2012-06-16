@@ -1,0 +1,13 @@
+.ship_options {
+  border: 1px solid black;
+  width: 300px;
+  margin: 4px;
+}
+
+.ship_type {
+  width: 150px;
+}
+
+.ship_color {
+  width: 150px;
+}
