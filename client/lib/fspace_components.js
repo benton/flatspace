@@ -22,7 +22,7 @@ var fspace_components = function () {
       init: function() {
         this.requires("PersistentProxy, 2D");
         // Push position updates into the Meteor database collection
-        this.bind("Move", function(old_pos) {
+        this.bind("PushPersistentData", function(old_pos) {
           Players.update(
             this.game_id(), {$set: {pos_x: this._x, pos_y: this._y}}
           );

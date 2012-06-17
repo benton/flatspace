@@ -11,6 +11,8 @@ var fsClient = function () {
   var log_to_console  = false;
   var ship_colors     = ["red", "yellow", "blue"];
   var ship_types      = ["Pilot", "Gunner", "Defender"];
+  var update_interval = 100; // How often to push data to server, in mSec
+
   //**** PRIVATE METHODS ****//
 
   // Initilize is a private method that sets up the frameworks.
@@ -53,6 +55,11 @@ var fsClient = function () {
       // Add the specific player class
       this_ship.addComponent("FlatSpace"+ player.type);
     });
+    // Start pushing persistent data to the server
+    Meteor.setInterval(
+      function () { Crafty.trigger("PushPersistentData"); },
+      update_interval
+    );
   };
 
   // Log the connection status to the server
