@@ -22,7 +22,7 @@ var fspace_components = function () {
       init: function() {
         this.requires("PersistentProxy, 2D");
         // Push position updates into the Meteor database collection
-        this.bind("PushPersistentData", function(old_pos) {
+        this.bind("PushPersistentData", function() {
           Players.update(
             this.game_id(), {$set: {pos_x: this._x, pos_y: this._y}}
           );
@@ -33,9 +33,9 @@ var fspace_components = function () {
 
     // Create a component that tracks position attributes in a Meteor
     // datastore document, and applies them to a Crafty entity
-    Crafty.c("PositionListener", {
+    Crafty.c("2DListener", {
       init: function() {
-        this.requires("PersistentProxy, 2D");
+        this.requires("PersistentProxy, 2D").origin("center");
         var collection  = this.collection();
         var id          = this.game_id();
         var slave       = this;
@@ -44,14 +44,30 @@ var fspace_components = function () {
           collection.find({ _id: id }).forEach( function(player_doc) {
             slave.x = player_doc.pos_x;
             slave.y = player_doc.pos_y;
+            if (player_doc.rot) { slave.rotation  = player_doc.rot; };
           });
         });
         return this;
       }
     });
 
-    // Create a component that tracks position and saves it
+    // Create a component that tracks rotation and saves it
     // in a document in a Meteor collection on the server
+    Crafty.c("RotationBroadcaster", {
+      init: function() {
+        this.requires("PersistentProxy, 2D");
+        // Push rotation updates into the Meteor database collection
+        this.bind("PushPersistentData", function() {
+          Players.update(
+            this.game_id(), {$set: {rot: this.rotation}}
+          );
+        });
+        return this;
+      }
+    });
+
+
+    // Create a component that models data for a player ship
     Crafty.c("FlatSpacePlayerShip", {
       _player_name: 'unknown',
       _color:       'gray',
@@ -75,6 +91,7 @@ var fspace_components = function () {
         this._db_id       = options.db_id;
         this.attr({       // for Componenet 2D
           x: options.x, y: options.y, w: options.w, h: options.h,
+          rotation: options.rotation
         });
         return this;
       }

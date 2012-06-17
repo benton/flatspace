@@ -42,15 +42,17 @@ var fsClient = function () {
           player_name: player.name,
           ship_color: player.color,
           db_id: player._id,
-          x: player.pos_x, y: player.pos_y, w: 20, h: 20
+          x: player.pos_x, y: player.pos_y, w: 20, h: 20,
+          rotation: player.rot
         });
       // Add movement controls and position pushing
       // if this ship's name matches the login name
       if (player.name === player_name) {
         this_ship.addComponent("PositionBroadcaster");
+        this_ship.addComponent("RotationBroadcaster");
         this_ship.addComponent("FlatSpaceMovementControl");
       } else {
-        this_ship.addComponent("PositionListener");
+        this_ship.addComponent("2DListener");
       };
       // Add the specific player class
       this_ship.addComponent("FlatSpace"+ player.type);
