@@ -54,12 +54,17 @@ var fspace_components = function () {
     // in a document in a Meteor collection on the server
     Crafty.c("FlatSpacePlayerShip", {
       _player_name: 'unknown',
-      _color: 'gray',
+      _color:       'gray',
+      _mass:        5000,
+      _thrust:      100,
+      _spin_speed:  3,
+      _max_speed:   2,
+      _min_speed:   0.001,
 
       init: function() {
         this.requires("PersistentProxy, 2D, DOM");
         this.bind('KeyDown', function(e) {
-          if(e.key === Crafty.keys['ESC']) { fsClient.logout(); }
+          if (e.key === Crafty.keys['ESC']) { fsClient.logout(); }
         });
         return this;
       },
@@ -117,6 +122,42 @@ var fspace_components = function () {
         var top       = new jxPoint(this._w / 2, strokew);
         var triangle  = new jxPolygon([bot_left, bot_right, top], pen, brush);
         triangle.draw(new jxGraphics(this._element));
+        return this;
+      },
+    });
+
+    // Create component with the default movement controls
+    Crafty.c("FlatSpaceMovementControl", {
+      init: function() {
+        this._vx = 0;  // initial horizontal velocity
+        this._vy = 0;  // initial vertical velocity
+
+        this.requires("Keyboard, FlatSpacePlayerShip").origin("center");
+        this.bind("EnterFrame", function() {
+    			var angle = this._rotation * (Math.PI / 180); // in radians
+    			var accel_x = Math.sin(angle) * this._thrust / this._mass;
+    			var accel_y = -Math.cos(angle) * this._thrust / this._mass;
+
+          // Spin left or right
+  				if (this.isDown(Crafty.keys.A)) { this.rotation -= this._spin_speed;}
+  				else
+  				if (this.isDown(Crafty.keys.D)) { this.rotation += this._spin_speed; }
+          // Forward Thrust
+    			if(this.isDown(Crafty.keys.W) || this.isDown(Crafty.keys.UP_ARROW)) {
+    				this._vx = Math.round((this._vx + accel_x) * 100) / 100;
+    				this._vy = Math.round((this._vy + accel_y) * 100) / 100;
+    			} else
+    			// Reverse Thrust
+    			if(this.isDown(Crafty.keys.S) || this.isDown(Crafty.keys.DOWN_ARROW)) {
+    				this._vx = Math.round((this._vx - accel_x) * 100) / 100;
+    				this._vy = Math.round((this._vy - accel_y) * 100) / 100;
+    			}
+  				if (Math.abs(this._vx) > this._max_speed) { this._vx = this._max_speed };
+  				if (Math.abs(this._vy) > this._max_speed) { this._vy = this._max_speed };
+    			// Update position
+    			this.x = Math.round((this.x + this._vx) * 100) / 100;
+    			this.y = Math.round((this.y + this._vy) * 100) / 100;
+    		});
         return this;
       },
     });

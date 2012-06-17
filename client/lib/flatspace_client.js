@@ -42,14 +42,15 @@ var fsClient = function () {
           db_id: player._id,
           x: player.pos_x, y: player.pos_y, w: 20, h: 20
         });
-      // Add Fourway controls if this ship's name matches the login name
+      // Add movement controls and position pushing
+      // if this ship's name matches the login name
       if (player.name === player_name) {
         this_ship.addComponent("PositionBroadcaster");
-        this_ship.fourway(1);
+        this_ship.addComponent("FlatSpaceMovementControl");
       } else {
         this_ship.addComponent("PositionListener");
       };
-      // (for now, everyone's a Defender)
+      // Add the specific player class
       this_ship.addComponent("FlatSpace"+ player.type);
     });
   };
