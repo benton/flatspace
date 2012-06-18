@@ -11,7 +11,7 @@ var fsClient = function () {
   var log_to_console  = false;
   var ship_colors     = ["red", "yellow", "blue"];
   var ship_types      = ["Pilot", "Gunner", "Defender"];
-  var update_interval = 100; // How often to push data to server, in mSec
+  var update_interval = 400; // How often to push data to server, in mSec
 
   //**** PRIVATE METHODS ****//
 
