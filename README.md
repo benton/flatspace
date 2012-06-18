@@ -2,7 +2,7 @@ Flatspace
 ================
 An experiment in real-time, multiplayer, browser-based gaming.
 
-  *SKELETON PROOF-OF-CONCEPT VERSION - just moves dots on the screen!*
+  *SKELETON PROOF-OF-CONCEPT VERSION - just moves shapes on the screen!*
 
 
 ----------------
@@ -20,6 +20,7 @@ Flatspace is a personal learning project, primarily intended to sharpen my Javas
     * Node.js
     * WebSockets
     * MongoDB
+    * HTML5 Canvas / Vector drawing
 
 
 ----------------
