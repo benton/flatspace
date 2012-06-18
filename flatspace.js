@@ -24,12 +24,13 @@ var fSpace = function () {
       // Create the player if the name doesn't already exist
       if (Players.find({name: player_name}).fetch().length < 1) {
         Players.insert({
-          name:  player_name,
-          type:  type,
-          color: color,
-          pos_x: Math.floor(Math.random()*300),
-          pos_y: Math.floor(Math.random()*300),
-          score: Math.floor(Math.random()*10)*5
+          name:   player_name,
+          type:   type,
+          color:  color,
+          pos_x:  Math.floor(Math.random()*300),
+          pos_y:  Math.floor(Math.random()*300),
+          rot:    0,
+          score:  Math.floor(Math.random()*10)*5
         });
       }
     },
