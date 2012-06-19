@@ -29,6 +29,8 @@ var fSpace = function () {
           color:  color,
           pos_x:  Math.floor(Math.random()*300),
           pos_y:  Math.floor(Math.random()*300),
+          vel_x:  0,
+          vel_y:  0,
           rot:    0,
           score:  Math.floor(Math.random()*10)*5
         });

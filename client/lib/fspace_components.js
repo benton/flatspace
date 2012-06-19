@@ -24,7 +24,10 @@ var fspace_components = function () {
         // Push position updates into the Meteor database collection
         this.bind("PushPersistentData", function() {
           Players.update(
-            this.game_id(), {$set: {pos_x: this._x, pos_y: this._y}}
+            this.game_id(), {$set: {
+              pos_x: this._x, pos_y: this._y,
+              vel_x: this._vx, vel_y: this._vy
+            }}
           );
         });
         return this;
@@ -40,13 +43,22 @@ var fspace_components = function () {
         var id          = this.game_id();
         var slave       = this;
         // Listen for Meteor doc updates
-        Meteor.autosubscribe(function () {
-          collection.find({ _id: id }).forEach( function(player_doc) {
+        Meteor.autosubscribe(function () { // TODO: scope query by visibility
+          player_doc = collection.findOne({ _id: id });
+          if (player_doc != undefined) {
             slave.x = player_doc.pos_x;
             slave.y = player_doc.pos_y;
-            if (player_doc.rot) { slave.rotation  = player_doc.rot; };
-          });
+            slave._vx = player_doc.vel_x;
+            slave._vy = player_doc.vel_y;
+            slave.rotation = player_doc.rot;
+          };
         });
+        // On each frame, update position based on pushed velocity
+        this.bind("EnterFrame", function() {
+    			slave.x = Math.round((slave.x + slave._vx) * 100) / 100;
+    			slave.y = Math.round((slave.y + slave._vy) * 100) / 100;
+    		});
+        this._vx = 0; this._vy = 0;
         return this;
       }
     });
@@ -66,7 +78,6 @@ var fspace_components = function () {
       }
     });
 
-
     // Create a component that models data for a player ship
     Crafty.c("FlatSpacePlayerShip", {
       _player_name: 'unknown',
@@ -76,12 +87,11 @@ var fspace_components = function () {
       _spin_speed:  3,
       _max_speed:   2,
       _min_speed:   0.001,
+      _vx:          0,
+      _vy:          0,
 
       init: function() {
         this.requires("PersistentProxy, 2D, DOM");
-        this.bind('KeyDown', function(e) {
-          if (e.key === Crafty.keys['ESC']) { fsClient.logout(); }
-        });
         return this;
       },
 
@@ -150,6 +160,15 @@ var fspace_components = function () {
         this._vy = 0;  // initial vertical velocity
 
         this.requires("Keyboard, FlatSpacePlayerShip").origin("center");
+
+        this.bind('KeyDown', function(e) {
+          if (e.key === Crafty.keys['ESC']) {
+            Players.update(this.game_id(), {$set: { vel_x: 0, vel_y: 0 }});
+            Meteor.flush();
+            fsClient.logout();
+          }
+        });
+
         this.bind("EnterFrame", function() {
     			var angle = this._rotation * (Math.PI / 180); // in radians
     			var accel_x = Math.sin(angle) * this._thrust / this._mass;
